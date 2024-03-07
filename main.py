@@ -30,9 +30,13 @@ and there is no quickly discernable "algorithmic" way to determine calls to make
 - cell values on my map seem to include:
 {'LEFT_COMETH', 'RED_SOLOON', 'BLUE_SOLOON', 'DOWN_COMETH', 'SPACE', 'POLYANET', 'PURPLE_SOLOON', 'RIGHT_COMETH', 'UP_COMETH', 'WHITE_SOLOON'}
 
-Room for improvement:
-- reduce number of HTTP calls
-- 
+Room for improvement: (after completing Phase 2 I am no longer able to test changes.)
+- reduce number of HTTP calls? seems impossible
+- remove global var and pass around instead
+- textual direction/color determination is obviosuly fragile
+- 3 separate functions for `add_soloon` etc should be consolidated into one,
+- API Calls are very basic and do not include anything but the most basic success/error handling.
+- etc etc etc
 
 """
 
