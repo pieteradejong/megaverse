@@ -2,6 +2,13 @@
 Thursday March 7, 2024. Crossmint "Megaverse" challenge.
 Solution by Pieter de Jong.
 
+Notes:
+- solution was designed with 'Important things to know' in mind.
+- Undure what this means 'don't manually call the API' aside from not knowing for loops.
+The endpoints do not allow passing lists; it seems necessary to perform a POST req for every non-SPACE cell.
+
+
+
 Phase 1: 
 - fetch goal map
 - traverse goal map; for each cell, if it's 'POLYANET', then `POST /api/polyanets` with row, col as payload
@@ -71,6 +78,11 @@ def load_config():
         logging.error("An unexpected error occurred: %s", e)
         sys.exit(1)
     
+# def init():
+    # logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # config = load_config()
+    # global candidateId # design choice for convenience; not ideal
+    # candidateId = config['CANDIDATE_ID']
 
 def add_polyanet(i, j, value = '') -> None:
     payload = {'row': i, 'column': j, 'candidateId': candidateId}
@@ -101,7 +113,6 @@ def add_comet(i, j, value) -> None:
 
 def handle(i, j, cell):
     if cell == CelestialBody.POLYANET.value:
-        print(f'Polyanet found at: {i} {j}')
         add_polyanet(i, j)
 
 def updateMap(i, j, cell):
@@ -113,17 +124,6 @@ def updateMap(i, j, cell):
         add_polyanet(i, j, cell)
     elif 'COMET' in cell:
         add_comet(i, j, cell)
-    
-
-    # match cell:
-    #     case CelestialBody.POLYANET.value:
-    #         add_polyanet(i, j)
-    #     case CelestialBody.SOLOON.value:
-    #         add_soloon(i, j)
-    #     case CelestialBody.COMET.value:
-    #         add_comet(i, j)
-    #     case _:
-    #         logging.warning(f'Unknown celestial body {cell} at position ({i}, {j})')
 
 def main():
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -142,12 +142,9 @@ def main():
     # Phase 2:
     resp = requests.get(f'{BASE_API_URL}/map/{candidateId}/goal')
     goal = resp.json().get('goal') 
-    options = set()
     for i, row in enumerate(goal):
         for j, cell in enumerate(row):
-            # options.add(cell)
             updateMap(i, j, cell)
-
 
 if __name__ == '__main__':
     main()
